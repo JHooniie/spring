@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.spring_mvc.book.dao.IBookDAO">
+  	<resultMap id="bookResult" type="com.spring_mvc.book.model.BookVO">
+  		<result property="bookNo" column="bookNo"/>
+  		<result property="bookName" column="bookName"/>
+  		<result property="bookAuthor" column="bookAuthor"/>
+  		<result property="bookDate" column="bookDate"/>
+  		<result property="bookPrice" column="bookPrice"/>
+  		<result property="bookStock" column="bookStock"/>
+  	</resultMap>
+
+  
+  <select id="listAllBook" resultMap="bookResult">
+  	SELECT * FROM book ORDER by bookNo
+  </select>
+  
+  <insert id="insertBook" parameterType="com.spring_mvc.book.model.BookVO">
+  INSERT INTO book (bookNo, bookName, bookAuthor, bookDate, bookPrice, bookStock)
+  	VALUES(#{bookNo}, #{bookName}, #{bookAuthor}, #{bookDate}, #{bookPrice}, #{bookStock})
+  </insert>
+  <!-- 테이블 이후 변수 작성 안해도 됨. SQL이랑 같음 -->
+  <select id="detailViewBook" parameterType="string"
+  							  resultType="com.spring_mvc.book.model.BookVO">
+  	SELECT * FROM book WHERE bookNo=#{bookNo}
+  </select>
+  
+  <update id="updateBook" parameterType="com.spring_mvc.book.model.BookVO">
+  UPDATE book
+  SET bookName=#{bookName}, bookAuthor=#{bookAuthor}, bookDate=#{bookDate}, 
+  bookPrice=#{bookPrice}, bookStock=#{bookStock}
+  WHERE bookNo=#{bookNo}
+  </update>
+  
+  <delete id="deleteBook" parameterType="string">
+  	DELETE FROM book WHERE bookNo=#{bookNo}
+  </delete>
+  
+  <!-- 상품번호 중복 확인 -->
+  <select id="bookNoCheck" parameterType="string" resultType="string">
+  	SELECT bookNo FROM book WHERE bookNo=#{bookNo}
+  </select>
+
+    <!-- 상품 검색 -->
+  <select id="bookSearch" parameterType="hashmap" resultMap="bookResult">
+  	SELECT * FROM book WHERE
+  	<choose>
+  		<when test="type != null and type.equals('bookName')">
+  			bookName LIKE CONCAT('%',#{keyword},'%')
+  		</when>
+  		<when test="type != null and type.equals('bookAuthor')">
+  			bookAuthor LIKE CONCAT('%',#{keyword},'%')
+  		</when>
+  	</choose>
+  </select>
+  
+   </mapper>
