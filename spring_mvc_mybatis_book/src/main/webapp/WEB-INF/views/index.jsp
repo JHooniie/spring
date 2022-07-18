@@ -11,7 +11,7 @@
 			
 			
 			<a href="/book/books/bookAllList">전체 도서 조회</a><br><br>
-			<a href="books/bookNewForm">도서 정보 등록</a><br><br>
+			<a href="books/bookNewForm">도서 정보 등록1</a><br><br>
 			<hr>
 
 
